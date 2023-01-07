@@ -4,40 +4,47 @@ let timer = document.querySelector("#pomodoro-time");
 
 function funStart() {
 
-    btnStart.textContent = "stop";
+    if (btnStart === "start") {
+        btnStart.textContent = "stop";
 
-    setInterval(() => {
-        setInterval(() => {
-            let minutes = parseInt(timer.textContent.split(":")[0]);
-            minutes--;
+        let timerID = setInterval(() => {
+            let timerID2 = setInterval(() => {
+                let minutes = parseInt(timer.textContent.split(":")[0]);
+                minutes--;
 
-            if (minutes < 0) {
-                clearInterval(timerId);
+                if (minutes < 0) {
+                    clearInterval(timerID2);
+                    return minutes;
+                }
                 return minutes;
+            }, 5000);
+
+            let seconds = parseInt(timer.textContent.split(":")[1]);
+            seconds--;
+
+            timer.textContent = `${minutes}:${seconds}`;
+
+            if (seconds <= 9) {
+                timer.textContent = `${minutes}:0${seconds}`;
             }
-            return minutes;
-        }, 60000);
 
+            if (seconds <= 0) {
+                return seconds = 60;
+            }
 
-        let seconds = parseInt(timer.textContent.split(":")[1]);
-        seconds--;
+        }, 1000);
+    }
 
-        timer.textContent = `${minutes}:${seconds}`;
+    if (btnStart === "stop") {
+        clearInterval(timerID);
+        return timer;
+    }
+    if (minutes === 0 || seconds === 0) {
+        timer.textContent = `25:00`;
+        btnStart.textContent = "start"
+    }
 
-        if (seconds <= 9) {
-            timer.textContent = `${minutes}:0${seconds}`;
-        }
-
-        if (seconds <= 0) {
-            return seconds = 60;
-        }
-
-
-
-    }, 1000);
 
 }
 
-btnStart.addEventListener('click', funStart());
-
-//при клике на **stop** таймер останавливается, но **не сбрасывается**, текст на кнопке снова меняется на **start**
+btnStart.addEventListener('click', funStart(timer));
